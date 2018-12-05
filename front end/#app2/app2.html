@@ -13,6 +13,7 @@
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/sockjs-client/sockjs.min.js"></script>
 <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 	<div class="head-contend">
@@ -26,11 +27,11 @@
 	</div>
 	<br>
 	<br>
-	<div class="limiter">
+	<div class="limiter new">
 		<div class="container-table100">
 			<div class="wrap-table100 centertext">
 				<div class="table100 ver1 m-b-110 centertext">
-					<table data-vertable="ver1">
+					<table data-vertable="ver1" id="tableRemove">
 						<thead>
 							<tr class="row100 head centertext">
 								<th class="centertext column1" data-column="column1">#</th>
@@ -41,7 +42,7 @@
 								<th class="centertext column6" data-column="column6">Location</th>
 							</tr>
 						</thead>
-						<tbody id="tbodys" class="centertext">
+						<tbody id="tbodys" class="centertext padding">
 							
 						</tbody>
 					</table>
@@ -64,7 +65,8 @@
                 <td id="address">{{address}}</td>
                 <td id="note">{{note}}</td>
                 <td>
-						<button id="buttonView" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#inforReq" onclick="locationIdentifier('{{address}}')">Vị trí khách</button>
+						<button id="add-btn" type="button" class="btn btn-primary padding" data-toggle="modal" data-target="#inforReq" onclick="locationIdentifier('{{address}}','{{id_request}}')"><i class="fa fa-map-marker"></i></button>
+						
 				</td>
               </tr>
             {{/each}}

@@ -1,10 +1,12 @@
 .head-contend{
-	background-color: #00A396;
-	padding: 15px;
-	color: white;
-	
+  background-color: #00A396;
+  padding: 15px;
+  color: white;
+  
 }
-
+.padding{
+  padding: 8px;
+}
 
 #floating-panel{
   position: absolute;
