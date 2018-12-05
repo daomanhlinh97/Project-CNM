@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.letsstartcoding.springbootrestapiexample.model.Driver;
+import com.letsstartcoding.springbootrestapiexample.model.Request;
 import com.letsstartcoding.springbootrestapiexample.repository.DriverRepository;
 
 @Service
@@ -45,19 +46,6 @@ public class DriverDAO {
 		return DriverRepository.findOne(id);
 	}
 	
-	/*get an driver by id*/
-//	public Driver findAcc(String name, String pass) {
-//		List<Driver> listDri = DriverRepository.findAll();
-//		Driver dri = new Driver();
-//		dri= null;
-//		for(int i=0;i<listDri.size();i++) {
-//			if(listDri.get(i).getName()== name && listDri.get(i).getPassword()==pass) {
-//				dri = listDri.get(i);
-//			}
-//		}
-//		return dri;
-//	}
-	
 	
 	public Driver findname(String name) {
 		List<Driver> listDri = DriverRepository.findAll();
@@ -78,13 +66,7 @@ public class DriverDAO {
 		DriverRepository.delete(dri);
 	}
 	
-	public static void main(String[] args) {
-//	
-//		Driver a =new Driver();
-//		long x=2;
-//		a = DAO.findOne(x);
-//		System.out.println("n");
-	}
+	
 	
 
 }

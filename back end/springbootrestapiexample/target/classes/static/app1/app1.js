@@ -47,6 +47,7 @@ function createJSON() {
     obj.status = 'Waiting..';
     obj.time = d.getTime();
     obj.id_drive =null;
-    obj.id_request=100;
+    obj.id_request = 1;
+    obj.geocode = "haha";
     return obj;
 }
