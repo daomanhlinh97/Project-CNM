@@ -2,13 +2,16 @@
 <html>
 <head>
 <title>Hello WebSocket</title>
-<link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/style.css">
+<meta charset="utf-8">
+
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
 <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	crossorigin="anonymous">
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 	<noscript>
@@ -25,18 +28,18 @@
 	<div class="col-sm-12 col-md-12"><h4>SHOW INFOMATION</h4></div>
 
 
-	<div class="limiter">
+	<div class="limiter centertext">
 			<div class="container-table100">
 				<div class="wrap-table100 centertext">
 					<div class="table100 ver1 m-b-110 centertext">
-						<table data-vertable="ver1">
+						<table data-vertable="ver1" id="tableRemove">
 							<thead>
-								<tr class="row100 head centertext">
-									<th class="centertext column1" data-column="column1">Name</th>
+								<tr class="row100 head centertext newhead">
+									<th class="centertext column1" data-column="column1">&nbsp &nbsp &nbsp Name</th>
 									<th class="centertext column2" data-column="column2">Location</th>
 									<th class="centertext column3" data-column="column3">Address_Customer</th>
 									<th class="centertext column4" data-column="column4">Id_Driver</th>
-									<th class="centertext column5" data-column="column5">Address_Driver</th>
+									<th class="centertext column5" data-column="column5">Info_Driver</th>
 									<th class="centertext column6" data-column="column6">Status</th>
 									
 								</tr>
@@ -51,10 +54,10 @@
 	<script id="product-template" type="text/x-handlebars-template">
 			{{#each this}}
 			<tr>
-				<th>{{name}}</th>
+				<th>&nbsp&nbsp{{name}}</th>
 				{{#if position}}
    				<th>
-						<button id="buttonView" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#inforReq" onclick="locationIdentifier('{{address}}')">{{position}}</button>
+						<button id="buttonView" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#inforReq" onclick="locationIdentifier('{{address}}','{{id_driver}}')">{{position}}</button>
 				</th>
 				{{else}}
 					<th>not yet</th>
@@ -62,18 +65,14 @@
 				<th>{{address}}</th>
 		
 				{{#if id_driver}}
-   				 <th>{{id_driver}}</th>
+   				 <th>&nbsp &nbsp &nbsp{{id_driver}}</th>
 				{{else}}
 					<th>none</th>
 				  {{/if}}
 				  
 				<th>
-					<p>
-						<span class="input">
-							<input id = "addressDriver" type="text" placeholder="Enter address of driver">
-							<span></span>
-						</span>
-					</p>
+					&nbsp &nbsp &nbsp 
+					<button id="add-btn" class="btn btn-primary" onclick="loadDriver('{{id_driver}}'); document.getElementById('id01').style.display='block';"><i class="fa fa-file-text-o"></i></button>
 				</th>  
 				{{#if status}}
    				 <th>{{status}}</th>
@@ -117,6 +116,41 @@
 					</div>
 				</div>
 			</div>
+			
+			
+	
+		<div id="id01" class="modal2">
+		  
+		  <form class="modal2-content animate" accept-charset="UTF-8">
+		    <div class="imgcontainer">
+		      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+		      
+		    </div>
+		
+		    <div class="container">
+		    	<div style=" color: DodgerBlue; font-size: 23px;">Driver Account</div>
+		    	<br>
+		      <label><b>UserID</b></label>
+		      <input type="text" style="padding: 8px;" id="id1" placeholder="Enter Username" name="userid" autocomplete="off" required>
+		      
+		      <label ><b>Fullname</b></label>
+		      <input type="text" style="padding: 8px;" id="name1"  placeholder="Enter Fullname" name="name" autocomplete="off" required>
+		
+		      <label><b>Address</b></label>
+		      <input type="text" style="padding: 8px;" id="address1" placeholder="Enter Phone" name="phone" autocomplete="off" required>
+		      
+		      <label><b>Status</b></label>
+		      <input type="text" style="padding: 8px;" id="status1" placeholder="Enter Email" name="email" autocomplete="off" required>
+
+		      
+		    </div>
+		
+		    
+		  </form>
+		</div>
+	
+				
+
 	<!-- Footer -->
 	<footer class="page-footer font-small teal pt-4 head-contend">
 
@@ -155,17 +189,16 @@
 
 	</footer>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-	<script src="geocoding.js"></script>
-	<script src="/webjars/jquery/jquery.min.js"></script>
-	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
-	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
-	<script src="app3.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 		crossorigin="anonymous"></script>
+	<script src="app3.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
+	<script src="geocoding.js"></script>
+	
 	
 </body>
 </html>

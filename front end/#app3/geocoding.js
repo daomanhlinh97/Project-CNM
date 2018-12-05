@@ -1,14 +1,25 @@
 
- function locationIdentifier(addr) {
+ function locationIdentifier(addr, id) {
   
     
-	if(document.getElementById('addressDriver').value === ''){
-         alert("Please Enter the address of Driver!");
+  var addr2;
+  if(id === ''){
+         alert("This Request hasn't a Driver!");
          location.reload();
     }
     else{
+      
+      var info_url = "http://localhost:8080/Driver/"; 
+        $.ajax({
+            url: info_url + id,
+            type: 'GET',
+            dataType: 'json',
+            timeout: 10000                         
+        }).done(function(val) { 
+          addr2 = val.address;
+          document.getElementById("reqAddDriver").innerHTML = val.address;
+        })
     document.getElementById("reqAddr").innerHTML = addr;
-    document.getElementById("reqAddDriver").innerHTML = document.getElementById("addressDriver").value;
 
      axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
          params: {
@@ -24,8 +35,7 @@
 
            var mapProp = {
                center: new google.maps.LatLng(lat, lng),
-               zoom: 30,
-             
+               zoom: 30,           
                mapTypeId: google.maps.MapTypeId.ROADMAP    
            };
 
@@ -44,7 +54,7 @@
            var directionsService = new google.maps.DirectionsService;
            directionsService.route({
                origin:addr,
-               destination:document.getElementById("addressDriver").value,
+               destination:addr2,
                travelMode: 'DRIVING',
            },function(result,status){
                if(status === 'OK')
